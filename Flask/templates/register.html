@@ -1,0 +1,57 @@
+
+{% extends "base.html" %}
+
+{% block title %}Criar Conta - Adoção de Pets{% endblock %}
+
+{% block content %}
+    <div style="max-width: 400px; margin: 50px auto;">
+        <div class="form-container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 3rem; margin-bottom: 15px;">✨</div>
+                <h1 style="color: #2c3e50; margin-bottom: 10px;">Criar Conta</h1>
+                <p style="color: #666;">Junte-se à comunidade Adote Aqui</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", placeholder="Digite um nome de usuário único") }}
+                    <small style="color: #666; font-size: 12px;">Mínimo 4 caracteres</small>
+                </div>
+                <div class="form-group">
+                    {{ form.nome_completo.label(class="form-label") }}
+                    {{ form.nome_completo(class="form-control", placeholder="Digite seu nome completo") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", placeholder="Crie uma senha segura") }}
+                    <small style="color: #666; font-size: 12px;">Mínimo 6 caracteres</small>
+                </div>
+                <div class="form-group">
+                    {{ form.password2.label(class="form-label") }}
+                    {{ form.password2(class="form-control", placeholder="Confirme sua senha") }}
+                </div>
+                <div style="text-align: center;">
+                    {{ form.submit(class="btn btn-success", style="width: 100%; padding: 12px; font-size: 1.1rem;") }}
+                </div>
+            </form>
+            
+            <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e9ecef;">
+                <p style="color: #666;">Já tem uma conta? 
+                    <a href="{{ url_for('login') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">Faça login aqui</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

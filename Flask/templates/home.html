@@ -1,0 +1,84 @@
+
+{% extends "base.html" %}
+
+{% block title %}Início - Adoção de Pets{% endblock %}
+
+{% block content %}
+    <div class="header fade-in">
+        <h1>🐾 Bem-vindo ao Adote Aqui!</h1>
+        <p style="text-align: center; color: #666; font-size: 1.1rem;">Encontre seu novo pet em Brasília</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if user %}
+            <div class="user-info">
+                <div>
+                    <h2 style="margin: 0; color: #2c3e50;">Olá, {{ user.nome_completo }}! 👋</h2>
+                    <p style="margin: 5px 0; color: #666;">Pronto para espalhar amor?</p>
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">🚪 Sair</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if user %}
+        <div class="nav-buttons fade-in">
+            <a href="{{ url_for('pets_disponiveis') }}" class="btn btn-primary">
+                🔍 Ver Pets Disponíveis
+            </a>
+            <a href="{{ url_for('meus_pets') }}" class="btn btn-success">
+                🏠 Meus Pets
+            </a>
+            <a href="{{ url_for('pets_adotados') }}" class="btn btn-info">
+                ❤️ Pets Adotados
+            </a>
+            <a href="{{ url_for('solicitacao') }}" class="btn btn-warning">
+                ➕ Adicionar Pet
+            </a>
+        </div>
+
+        <div class="pet-card fade-in">
+            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center;">✨ Sobre o Adote Aqui</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🐕</div>
+                    <h4 style="color: #667eea; margin-bottom: 10px;">Encontre seu Amigo</h4>
+                    <p style="color: #666;">Navegue por centenas de pets esperando por um lar cheio de amor.</p>
+                </div>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🏡</div>
+                    <h4 style="color: #667eea; margin-bottom: 10px;">Doe com Amor</h4>
+                    <p style="color: #666;">Coloque seu pet para adoção e encontre a família perfeita.</p>
+                </div>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">💝</div>
+                    <h4 style="color: #667eea; margin-bottom: 10px;">Transforme Vidas</h4>
+                    <p style="color: #666;">Cada adoção é uma vida transformada e um coração preenchido.</p>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="empty-state fade-in">
+            <div style="font-size: 4rem; margin-bottom: 20px;">🐾</div>
+            <h2 style="color: #2c3e50; margin-bottom: 15px;">Bem-vindo ao Adote Aqui!</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 30px;">A plataforma que conecta corações humanos e patinhas carinhosas.</p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">
+                    🔑 Fazer Login
+                </a>
+                <a href="{{ url_for('register') }}" class="btn btn-success">
+                    ✨ Criar Conta
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

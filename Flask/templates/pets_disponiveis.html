@@ -1,0 +1,82 @@
+
+{% extends "base.html" %}
+
+{% block title %}Pets Disponíveis - Adoção de Pets{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">← Voltar ao Início</a>
+        <h1>🔍 Pets Disponíveis para Adoção</h1>
+        <p>Logado como: <strong>{{ user.nome_completo }}</strong></p>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    {% if template_pets %}
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: #2c3e50;">💕 {{ template_pets|length }} pets esperando por você!</h2>
+        </div>
+        
+        {% for pet in template_pets %}
+            <div class="pet-card">
+                <div class="pet-header">
+                    <div class="pet-image">
+                        {% if pet.foto_pet %}
+                            <img src="{{ url_for('static', filename='uploads/' + pet.foto_pet) }}" alt="Foto de {{ pet.nome_pet }}">
+                        {% else %}
+                            <div class="pet-placeholder">
+                                <span>🐾</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="pet-info">
+                        <h3>{{ pet.nome_pet }} 
+                            {% if pet.tipo_pet.lower() == 'cachorro' %}🐕
+                            {% elif pet.tipo_pet.lower() == 'gato' %}🐱
+                            {% elif pet.tipo_pet.lower() == 'coelho' %}🐰
+                            {% else %}🐾
+                            {% endif %}
+                        </h3>
+                        <p><strong>Tipo:</strong> {{ pet.tipo_pet.title() }}</p>
+                        <p><strong>Raça:</strong> {{ pet.raca_pet }}</p>
+                        <p><strong>Idade:</strong> {{ pet.idade_pet }} anos</p>
+                        <p><strong>Dono:</strong> {{ pet.dono.nome_completo }}</p>
+                    </div>
+                </div>
+                
+                <div class="pet-personality">
+                    <strong>💭 Personalidade:</strong><br>
+                    {{ pet.personalidade_pet }}
+                </div>
+                
+                <div class="pet-footer">
+                    <div>
+                        <small style="color: #666;">📅 Disponível desde: {{ pet.data_criacao.strftime('%d/%m/%Y') }}</small>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('adotar_pet', pet_id=pet.pet_id) }}" 
+                           class="btn btn-success btn-adopt"
+                           onclick="return confirmAdopt('{{ pet.nome_pet }}');">
+                            💝 Adotar {{ pet.nome_pet }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div style="font-size: 4rem; margin-bottom: 20px;">😔</div>
+            <h3>Não há pets disponíveis para adoção no momento</h3>
+            <p>Que tal voltar mais tarde para ver novos amiguinhos?</p>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">🏠 Voltar ao Início</a>
+        </div>
+    {% endif %}
+{% endblock %}

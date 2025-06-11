@@ -1,0 +1,64 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('home') }}" style="background-color: #6c757d; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">← Voltar ao Início</a>
+    </div>
+
+    <h1>Meus Pets Adotados</h1>
+    <p>Logado como: <strong>{{ user.nome_completo }}</strong></p>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="padding: 10px; margin: 10px 0; border-radius: 5px; background-color: {% if category == 'success' %}#d4edda{% elif category == 'error' %}#f8d7da{% else %}#fff3cd{% endif %};">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    {% if template_pets %}
+        {% for pet in template_pets %}
+            <div style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    {% if pet.foto_pet %}
+                        <img src="{{ url_for('static', filename='uploads/' + pet.foto_pet) }}" alt="Foto de {{ pet.nome_pet }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin-right: 20px;">
+                    {% else %}
+                        <div style="width: 100px; height: 100px; background-color: #e9ecef; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                            <span style="color: #6c757d;">Sem foto</span>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h3 style="margin: 0; color: #333;">{{ pet.nome_pet }}</h3>
+                        <p style="margin: 5px 0; color: #666;"><strong>Tipo:</strong> {{ pet.tipo_pet.title() }}</p>
+                        <p style="margin: 5px 0; color: #666;"><strong>Raça:</strong> {{ pet.raca_pet }}</p>
+                        <p style="margin: 5px 0; color: #666;"><strong>Idade:</strong> {{ pet.idade_pet }} anos</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <p style="margin: 5px 0;"><strong>Personalidade:</strong></p>
+                    <p style="margin: 5px 0; padding: 10px; background-color: #fff; border-radius: 5px; border-left: 4px solid #17a2b8;">{{ pet.personalidade_pet }}</p>
+                </div>
+                
+                <div style="display: flex; justify-content: between; align-items: center;">
+                    <div>
+                        <span style="background-color: #17a2b8; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">Adotado por você</span>
+                        <p style="margin: 5px 0; color: #666; font-size: 14px;">Dono original: {{ pet.dono.nome_completo }}</p>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <small style="color: #666;">Adotado em: {{ pet.data_adocao.strftime('%d/%m/%Y') if pet.data_adocao else 'Data não disponível' }}</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 10px;">
+            <h3 style="color: #6c757d;">Você ainda não adotou nenhum pet</h3>
+            <p style="color: #6c757d;">Vá para "Pets Disponíveis" para encontrar seu novo companheiro!</p>
+            <a href="{{ url_for('pets_disponiveis') }}" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Ver Pets Disponíveis</a>
+        </div>
+    {% endif %}
+{% endblock %}

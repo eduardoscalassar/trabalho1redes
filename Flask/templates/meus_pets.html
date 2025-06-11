@@ -1,0 +1,70 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('home') }}" style="background-color: #6c757d; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">← Voltar ao Início</a>
+        <a href="{{ url_for('solicitacao') }}" style="background-color: #ffc107; color: black; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-left: 10px;">+ Adicionar Novo Pet</a>
+    </div>
+
+    <h1>Meus Pets para Adoção</h1>
+    <p>Logado como: <strong>{{ user.nome_completo }}</strong></p>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="padding: 10px; margin: 10px 0; border-radius: 5px; background-color: {% if category == 'success' %}#d4edda{% elif category == 'error' %}#f8d7da{% else %}#fff3cd{% endif %};">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    {% if template_pets %}
+        {% for pet in template_pets %}
+            <div style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    {% if pet.foto_pet %}
+                        <img src="{{ url_for('static', filename='uploads/' + pet.foto_pet) }}" alt="Foto de {{ pet.nome_pet }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin-right: 20px;">
+                    {% else %}
+                        <div style="width: 100px; height: 100px; background-color: #e9ecef; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                            <span style="color: #6c757d;">Sem foto</span>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h3 style="margin: 0; color: #333;">{{ pet.nome_pet }}</h3>
+                        <p style="margin: 5px 0; color: #666;"><strong>Tipo:</strong> {{ pet.tipo_pet.title() }}</p>
+                        <p style="margin: 5px 0; color: #666;"><strong>Raça:</strong> {{ pet.raca_pet }}</p>
+                        <p style="margin: 5px 0; color: #666;"><strong>Idade:</strong> {{ pet.idade_pet }} anos</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <p style="margin: 5px 0;"><strong>Personalidade:</strong></p>
+                    <p style="margin: 5px 0; padding: 10px; background-color: #fff; border-radius: 5px; border-left: 4px solid #007bff;">{{ pet.personalidade_pet }}</p>
+                </div>
+                
+                <div style="display: flex; justify-content: between; align-items: center;">
+                    <div>
+                        {% if pet.disponivel %}
+                            <span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">Disponível</span>
+                        {% else %}
+                            <span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">Adotado</span>
+                            {% if pet.adotante %}
+                                <p style="margin: 5px 0; color: #666; font-size: 14px;">Adotado por: {{ pet.adotante.nome_completo }}</p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div style="margin-left: auto;">
+                        <small style="color: #666;">Adicionado em: {{ pet.data_criacao.strftime('%d/%m/%Y') }}</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 10px;">
+            <h3 style="color: #6c757d;">Você ainda não adicionou nenhum pet para adoção</h3>
+            <p style="color: #6c757d;">Clique no botão "Adicionar Novo Pet" para começar!</p>
+        </div>
+    {% endif %}
+{% endblock %}

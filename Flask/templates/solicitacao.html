@@ -1,0 +1,69 @@
+
+{% extends "base.html" %}
+
+{% block title %}Adicionar Pet - Adoção de Pets{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <a href="{{ url_for('meus_pets') }}" class="btn btn-secondary">← Voltar aos Meus Pets</a>
+        <h1>➕ Adicionar Pet para Adoção</h1>
+        <p>Logado como: <strong>{{ user.nome_completo }}</strong></p>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="form-container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🐾</div>
+            <h2 style="color: #2c3e50;">Conte-nos sobre seu pet</h2>
+            <p style="color: #666;">Preencha as informações para encontrar o lar perfeito</p>
+        </div>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {{ template_form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ template_form.tipo_pet.label(class="form-label") }}
+                {{ template_form.tipo_pet(class="form-control", placeholder="Ex: Cachorro, Gato, Coelho...") }}
+            </div>
+            
+            <div class="form-group">
+                {{ template_form.nome_pet.label(class="form-label") }}
+                {{ template_form.nome_pet(class="form-control", placeholder="Ex: Rex, Mimi, Bolinha...") }}
+            </div>
+            
+            <div class="form-group">
+                {{ template_form.raca_pet.label(class="form-label") }}
+                {{ template_form.raca_pet(class="form-control", placeholder="Ex: Labrador, Siamês, SRD...") }}
+            </div>
+            
+            <div class="form-group">
+                {{ template_form.idade_pet.label(class="form-label") }}
+                {{ template_form.idade_pet(class="form-control", placeholder="Ex: 2, 5, 1...") }}
+            </div>
+            
+            <div class="form-group">
+                {{ template_form.personalidade_pet.label(class="form-label") }}
+                {{ template_form.personalidade_pet(class="form-control", placeholder="Conte sobre a personalidade, hábitos e características especiais do seu pet...", rows="4") }}
+            </div>
+            
+            <div class="form-group">
+                {{ template_form.foto_pet.label(class="form-label") }}
+                {{ template_form.foto_pet(class="form-control", onchange="previewImage(this)") }}
+                <small style="color: #666; font-size: 12px;">Formatos aceitos: JPG, PNG, JPEG, GIF</small>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                {{ template_form.solicitar(class="btn btn-success", style="padding: 15px 40px; font-size: 1.1rem;") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
